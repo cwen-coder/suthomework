@@ -3,16 +3,16 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <semaphore.h>
-#define N 2   // 消费者或者生产者的数目
-#define M 10 // 缓冲数目
-int in = 0;   // 生产者放置产品的位置
-int out = 0; // 消费者取产品的位置
-int buff[M] = {0}; // 缓冲初始化为0， 开始时没有产品
-sem_t empty_sem; // 同步信号量， 当满了时阻止生产者放产品
-sem_t full_sem;   // 同步信号量， 当没产品时阻止消费者消费
-pthread_mutex_t mutex; // 互斥信号量， 一次只有一个线程访问缓冲
-int product_id = 0;   //生产者id
-int prochase_id = 0; //消费者id
+#define N 2   
+#define M 10 
+int in = 0;   
+int out = 0; 
+int buff[M] = {0};
+sem_t empty_sem; 
+sem_t full_sem;  
+pthread_mutex_t mutex;
+int product_id = 0;  
+int prochase_id = 0; 
 /* 打印缓冲情况 */
 void print()
 {
