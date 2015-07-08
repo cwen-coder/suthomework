@@ -17,7 +17,7 @@ struct pnode {
 	pnode *sub;
 	pnode *brother;
 	pnode *next;
-}; 
+};
 struct semphore {
 	char name[5];
 	int count;
@@ -43,7 +43,7 @@ char *substr(char *s,int start,int end) {
 	for(i = 0; i <= end-start; i++)
 		s1[i] = s[i+start];
 	s1[i+1] = '\0';
-	return s1; 
+	return s1;
 }
 
  int instr(char *s,char c) {
@@ -52,18 +52,18 @@ char *substr(char *s,int start,int end) {
  		if(s[i] == c) return i;
 	return -1;
  }
- 
+
  int *strtoarray(char *s) {
  	int *a,count,x1;
  	int i;
  	char c,*s1,*s2;
  	if(!s) {
-	 	printf("string can't be null!\n"); 
+	 	printf("string can't be null!\n");
 	 	return NULL;
 	 }
 	 count = 0;
 	 s1 = s;
-	 for(i = 0; i < strlen(s1); i++) 
+	 for(i = 0; i < strlen(s1); i++)
 	 	if(s1[i] == ',')count++;
  	count++;
  	a = (int *)malloc(count);
@@ -76,7 +76,7 @@ char *substr(char *s,int start,int end) {
 	 	if(c == ',')
 	 		s1 = substr(s1,x1+1,strlen(s1)-1);
 	 }
-	 return a; 
+	 return a;
  }
  #endif
- 
+
