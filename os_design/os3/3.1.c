@@ -1,57 +1,49 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define getpch(type) (type*)malloc(sizeof(type)) 
-struct LNode
-{ 
+struct LNode { 
 	int size;
 	int start;
 	int end;
 	struct LNode *next;
 	struct LNode *front;
-}*L; /*L为头指针*/
+}*L; 
 typedef struct LNode LN;
-LN *find;//循环首次适应算法里用来记录上次分配的地址
-int n;//内存链的数量
-void InsertList(int size,int start)
-{	// 在带头结点的单链线形表头结点后插入
+LN *find;
+int n;
+void InsertList(int size,int start) {	
 	LN *p,*s,*t;
 	p=L;
 	t=p->next;	                                  
-	s=getpch(LN);  //生成新结点
+	s=getpch(LN);  
 	s->size=size;
 	s->start=start;
 	s->end=start + size ;	
-	s->next=t;          //插入L中
+	s->next=t;      
 	p->next=s;
 	if(t)   t->front=s;
 	s->front=p;
-}//end of InsertList
-void PrintList() /*打印*/
-{
+}
+void PrintList() {
 	LN *p; int i;
 	p=L->next;
 	printf("\n空闲区号  长度  起始位置  终止位置\n");
-	for(i=1;i<=n;i++)
-	{
+	for(i=1;i<=n;i++) {
 		printf(" %3d\t  %3d\t%3d\t  %4d\n",i,p->size, p->start,p->end);
 		p=p->next;
 	}
 }
-void BFSortList() /*最佳适应算法的排序*/ 
-{
+void BFSortList() {
 	LN *p,*s,*t;
 	int min_size,i;
 	int size,start,end;		
 	t=L->next;
 	p=L->next;
-	for(i=0;i<n;i++) //按每个链结的
-	{
+	for(i=0;i<n;i++) {
 		s=p->next;
 		min_size = p->size;
-		while(s)
-		{
-			if(min_size>s->size)//按内存大小排序
-			{
+		while(s){
+			if(min_size>s->size) {
 				min_size=s->size;
 				t=s;
 			}
@@ -73,22 +65,18 @@ void BFSortList() /*最佳适应算法的排序*/
 		p=p->next;
 	}
 }
-// end of BF_SortList
-void SortList() /*首次和循环首次适应算法的排序*/
-{
+
+void SortList() {
 	LN *p,*s,*t;
 	int min_start,i;
 	int size,start,end;		
 	t=L->next;
 	p=L->next;
-	for(i=0;i<n;i++) 
-	{
+	for(i=0;i<n;i++) {
 		s=p->next;
 		min_start=p->start;
-		while(s)
-		{
-			if(min_start>s->start)//按起始地址大小排序
-			{
+		while(s){
+			if(min_start>s->start){
 				min_start=s->start;
 				t=s;
 			}
@@ -109,11 +97,10 @@ void SortList() /*首次和循环首次适应算法的排序*/
 		t=p->next;
 		p=p->next;
 	}
-}// end of BF_SortList
-void GetFree()  /*生成空闲分区链*/
-{
+}
+void GetFree()  {
 	int size,start,i;
-	L=getpch(LN);  /*生成一个表头结点*/
+	L=getpch(LN);  
 	L->next=NULL;
 	L->front=NULL;
 	printf("请输入空闲区数:");
@@ -127,29 +114,24 @@ void GetFree()  /*生成空闲分区链*/
 	printf("分配完毕!\n");
 	//printf("\n空闲链表情况:\n");
 	//PrintList();
-}// end of GetFree
-void Assign(int size) /*最佳适应算法和首次适应算法空闲分区的分配*/
+}
+void Assign(int size) 
 {
 	LN *p,*t;
 	p=L->next;
 	t=L;
-	while(p)
-	{
-		if(size > p->size)
-		{
+	while(p){
+		if(size > p->size){
 			p=p->next;
 			t=t->next;
-			if(!p)
-			{				
+			if(!p){				
 				printf("没有足够大的空闲区分配！分配不成功");			   
 			}
 		}
-		else
-		{
+		else{
 			p->size = p->size - size;
 			p->start= p->start + size ;
-			if(p->size==0)//申请size直接就等于分配的大小
-			{
+			if(p->size==0){
 				t->next = p->next ;
 				p->next->front=t;
 				n--;
@@ -161,32 +143,26 @@ void Assign(int size) /*最佳适应算法和首次适应算法空闲分区的�
 			break;			
 		}
 	}
-}// end of FF_Assign
+}
 int flag=-1;
-void NF_Assign(int size)/*循环首次适应算法的分配*/
-{
+void NF_Assign(int size) {
 	LN *p,*t;
 	int i=n;
 	p=find->next;
 	t=find;
-	while(p)
-	{
-		if(size > p->size)
-		{
+	while(p) {
+		if(size > p->size){
 			p=p->next;
 			t=t->next;
-			if(!p)
-			{				
+			if(!p){				
 				printf("没有足够大的空闲区分配！分配不成功");			   
 			}
 		}
-		else
-		{
+		else{
 			p->size = p->size - size;
 			p->start= p->start + size ;
-			find=p;//定位此次找到的位置，给下次使用的时候用
-			if(p->size==0)
-			{
+			find=p;
+			if(p->size==0){
 				t->next = p->next;
 				p->next->front=t;
 				n--;
@@ -199,28 +175,22 @@ void NF_Assign(int size)/*循环首次适应算法的分配*/
 			break;	
 		}
 	}
-	if(flag==-1)//找到链表尾部也没找到合适的,再从头寻找
-	{	
+	if(flag==-1){	
 		p=L->next;
 		t=L;	
-	while(p!=find)//找到find处就可以了
-	{
-		if(size > p->size)
-		{
+	while(p!=find){
+		if(size > p->size){
 			p=p->next;
 			t=t->next;
-			if(!p)
-			{				
+			if(!p){				
 				printf("没有足够大的空闲区分配！分配不成功");			   
 			}
 		}
-		else
-		{
+		else{
 			p->size = p->size - size;
 			p->start= p->start + size ;
 			find=t;
-			if(p->size==0)
-			{
+			if(p->size==0){
 				t->next = p->next ;
 				p->next->front=t;
 				n--;
@@ -235,18 +205,15 @@ void NF_Assign(int size)/*循环首次适应算法的分配*/
 	}
 	
 	}
-}// end of NF_Assign
-void  Recover(int start, int end)  /*回收*/
-{
+}
+void  Recover(int start, int end)  {
 	LN *p,*t;
 	int size,flag=0;
 	size=end-start;	
 	p=L->next;
 	t=p->next;
-	while(p)
-	{
-		if(t && p->end==start && t->start==end)//回收区在两个空闲区中间
-		{
+	while(p){
+		if(t && p->end==start && t->start==end){
 			p->size = p->size + size + t->size;
 			p->end = t->end;
 			p->next=t->next;
@@ -258,8 +225,7 @@ void  Recover(int start, int end)  /*回收*/
 			flag=1;
             break;			
 		}
-		else if(p->end == start)//回收区在空闲区下方
-		{    
+		else if(p->end == start){    
 			flag=1;
 			p->size = p->size + size;
 			p->end = p->end + size ;
@@ -267,8 +233,7 @@ void  Recover(int start, int end)  /*回收*/
 			
 			break;
 		}
-		else if( p->start == end)//回收区在空闲区上方
-		{
+		else if( p->start == end){
 			p->size= p->size +size;
 			p->start=start;
 			SortList();
@@ -280,10 +245,9 @@ void  Recover(int start, int end)  /*回收*/
 		if(p)
 			t=p->next;               
 	}
-    //回收区不与任何一个空闲区相邻
-	if(flag==0)
-	{ 
-		InsertList(size,start);//插入一个区域  
+
+	if(flag==0){ 
+		InsertList(size,start); 
 		n++;
 	}
 	printf("回收后的空闲链表情况如下:");
@@ -303,18 +267,15 @@ int window()
 	scanf("%d",&m);
 	return m;
 }
-int main()
-{
+int main(){
 	int start,end,size;
 	int m;
 	GetFree();
 	getchar();
     m=window();
 	if(m==2) find=L;
-	while(m)
-	{
-		switch(m)
-		{
+	while(m){
+		switch(m){
 		case 1:	    
 			SortList();  
 			printf("\n空闲链表情况:\n");
